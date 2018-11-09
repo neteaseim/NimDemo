@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/login_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edt_login_user_account"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="帐号" />
+
+        <EditText
+            android:id="@+id/edt_login_user_password"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:hint="密码"
+            android:inputType="textPassword" />
+
+
+        <TextView
+            android:id="@+id/tv_go_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="还没有帐号，点击注册" />
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="登录" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/register_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/edt_register_user_account"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="帐号" />
+
+        <EditText
+            android:id="@+id/edt_register_user_name"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="昵称" />
+
+        <EditText
+            android:id="@+id/edt_register_user_password"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:hint="密码"
+            android:inputType="textPassword" />
+
+
+        <TextView
+            android:id="@+id/tv_go_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="已有帐号，点击登录" />
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="注册" />
+    </LinearLayout>
+
+</FrameLayout>
