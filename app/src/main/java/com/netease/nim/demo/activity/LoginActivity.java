@@ -1,8 +1,8 @@
 package com.netease.nim.demo.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import com.netease.nim.demo.R;
 import com.netease.nim.demo.RegisterHttpClient;
-import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.common.util.string.MD5;
+import com.netease.nim.demo.utils.BaseUtil;
+import com.netease.nim.demo.utils.BaseInfo;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -71,17 +71,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    private boolean isRegistering;
 
     private void register() {
+        if (isRegistering) {
+            Toast.makeText(this, "正在注册中，请勿重复提交", Toast.LENGTH_SHORT).show();
+            return;
+        }
         final String account = edtRegisterUserAccount.getText().toString();
         String nick = edtRegisterUserName.getText().toString();
         final String password = edtRegisterPassword.getText().toString();
         if (TextUtils.isEmpty(account) || TextUtils.isEmpty(nick) || TextUtils.isEmpty(password)) {
             Toast.makeText(this, "相关信息不能为空", Toast.LENGTH_SHORT).show();
+            return;
         }
-        RegisterHttpClient.getInstance().register(account, nick, password, new RegisterHttpClient.HttpCallback<Void>() {
+        isRegistering = true;
+        RegisterHttpClient.getInstance().register(account, nick, password, new RegisterHttpClient.HttpCallback() {
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess() {
+                isRegistering = false;
                 Toast.makeText(LoginActivity.this, "注册成功 ", Toast.LENGTH_SHORT).show();
                 login(account, password);
 
@@ -89,23 +97,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailed(int code, String errorMsg) {
-                Toast.makeText(LoginActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+                isRegistering = false;
+                Toast.makeText(LoginActivity.this, "注册失败：code = " + code + " , msg = " + errorMsg, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void login(String name, String password) {
+    private boolean isInLogin;
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(password)) {
+    private void login(final String account, String password) {
+
+        if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
             Toast.makeText(this, "相关信息不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        password = MD5.getStringMD5(password);
-
-        NIMClient.getService(AuthService.class).login(new LoginInfo(name, password)).setCallback(new RequestCallback<LoginInfo>() {
+        if (isInLogin) {
+            Toast.makeText(this, "正在登录中，请勿重复提交", Toast.LENGTH_SHORT).show();
+        }
+        password = BaseUtil.getStringMD5(password);
+        isInLogin = true;
+        NIMClient.getService(AuthService.class).login(new LoginInfo(account, password)).setCallback(new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo o) {
-                NimUIKit.loginSuccess(o.getAccount());
+                isInLogin = false;
+                BaseInfo.setAccount(account);
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -114,11 +129,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailed(int code) {
-                Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                isInLogin = false;
+                Toast.makeText(LoginActivity.this, "登录失败，code = " + code, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onException(Throwable throwable) {
+                isInLogin = false;
                 Toast.makeText(LoginActivity.this, "登录异常", Toast.LENGTH_SHORT).show();
             }
         });

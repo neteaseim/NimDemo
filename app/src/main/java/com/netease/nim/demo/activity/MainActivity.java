@@ -10,8 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.netease.nim.demo.R;
-import com.netease.nim.uikit.business.contact.ContactsFragment;
-import com.netease.nim.uikit.business.recent.RecentContactsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,10 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int i) {
-            if (i == 0) {
-                return new RecentContactsFragment();
-            }
-            return new ContactsFragment();
+//            if (i == 0) {
+//                return new RecentContactsFragment();
+//            }
+//            return new ContactsFragment();
+            return new Fragment();
         }
 
         @Override
