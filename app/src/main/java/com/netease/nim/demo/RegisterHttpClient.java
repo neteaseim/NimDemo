@@ -40,22 +40,12 @@ public class RegisterHttpClient {
         void onFailed(int code, String errorMsg);
     }
 
-    private static RegisterHttpClient instance;
+    private Handler handler = new Handler(BaseInfo.getContext().getMainLooper());
 
     public static RegisterHttpClient getInstance() {
-        if (instance != null) {
-            return instance;
-        }
-        synchronized (RegisterHttpClient.class) {
-            if (instance != null) {
-                return instance;
-            }
-            instance = new RegisterHttpClient();
-        }
-        return instance;
+        return InstanceHolder.REGISTER_HTTP_CLIENT;
     }
 
-    private Handler handler = new Handler(BaseInfo.getContext().getMainLooper());
 
     private RegisterHttpClient() {
     }
@@ -208,5 +198,9 @@ public class RegisterHttpClient {
             this.code = code;
             this.message = message;
         }
+    }
+
+    private static class InstanceHolder {
+        private static final RegisterHttpClient REGISTER_HTTP_CLIENT = new RegisterHttpClient();
     }
 }
