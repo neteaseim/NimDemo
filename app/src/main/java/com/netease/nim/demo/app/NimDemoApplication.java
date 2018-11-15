@@ -9,7 +9,9 @@ public class NimDemoApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //SDK初始化
         NIMClient.init(this, null, null);
+
         BaseInfo.init(this);
     }
 }
